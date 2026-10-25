@@ -6,7 +6,11 @@ import pickle
 import streamlit as st
 from huggingface_hub import hf_hub_download
 
-st.set_page_config(page_title="Movie recomendation system",page_icon="https://www.google.com/imgres?q=movie%20icon%20image&imgurl=https%3A%2F%2Fwww.iconpacks.net%2Ficons%2F1%2Ffree-movie-icon-850-thumb.png&imgrefurl=https%3A%2F%2Fwww.iconpacks.net%2Ffree-icon%2Fmovie-850.html&docid=cPhsrnKf6O2HJM&tbnid=wUJmkqWSSwdIRM&vet=12ahUKEwibmf623NWXAxVjjOEIHbMoANIQnPAOegQIYBAA..i&w=512&h=512&hcb=2&ved=2ahUKEwibmf623NWXAxVjjOEIHbMoANIQnPAOegQIYBAA")
+st.set_page_config(
+    page_title="Movie Recommendation System",
+    page_icon="logo.jpg",
+    layout="wide"
+)
 
 
 TMDB_API_KEY = "92edb2f6323fd5c6c9a1f7e349be2f2d"
