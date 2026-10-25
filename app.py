@@ -2,16 +2,14 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
-import numpy as np
-import os
 import pickle
 import streamlit as st
 from huggingface_hub import hf_hub_download
 
 st.set_page_config(page_title="Movie recomendation system",page_icon="https://www.google.com/imgres?q=movie%20icon%20image&imgurl=https%3A%2F%2Fwww.iconpacks.net%2Ficons%2F1%2Ffree-movie-icon-850-thumb.png&imgrefurl=https%3A%2F%2Fwww.iconpacks.net%2Ffree-icon%2Fmovie-850.html&docid=cPhsrnKf6O2HJM&tbnid=wUJmkqWSSwdIRM&vet=12ahUKEwibmf623NWXAxVjjOEIHbMoANIQnPAOegQIYBAA..i&w=512&h=512&hcb=2&ved=2ahUKEwibmf623NWXAxVjjOEIHbMoANIQnPAOegQIYBAA")
 
+TMDB_API_KEY = st.secrets["92edb2f6323fd5c6c9a1f7e349be2f2d"]
 
-TMDB_API_KEY = "92edb2f6323fd5c6c9a1f7e349be2f2d"
 def fetch_poster(movie_id):
     """Fetch movie poster from TMDB API."""
 
@@ -52,7 +50,6 @@ def fetch_poster(movie_id):
         st.warning(f"TMDB API error: {e}")
         return None
 
-    return "https://image.tmdb.org/t/p/w500/"+ data['poster_path']
 def recommend (movie):
     movie_index = movies[movies['title'] == movie].index[0]
     distances = similarity[movie_index]
@@ -77,6 +74,9 @@ movies =pd.DataFrame(movies_dict)
 
 
 import streamlit as st
+movies_dict = pickle.load(open("movie_dict.pkl", "rb"))
+movies = pd.DataFrame(movies_dict)
+
 @st.cache_resource
 def load_similarity():
     file_path = hf_hub_download(
@@ -89,12 +89,15 @@ def load_similarity():
         return pickle.load(file)
 
 similarity = load_similarity()
+
 selected_movie_name = st.selectbox(
     "Select movie to recommend",
     movies["title"].values,
 )
-similarity = pickle.load(open("similarity.pkl", "rb"))
+
 st.write("You selected:", selected_movie_name)
+
+
 
 if st.button("Recommend"):
 
