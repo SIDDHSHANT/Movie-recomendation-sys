@@ -3,6 +3,11 @@ import pickle
 import pandas as pd
 import requests
 import numpy as np
+import os
+import pickle
+import streamlit as st
+from huggingface_hub import hf_hub_download
+
 st.set_page_config(page_title="Movie recomendation system",page_icon="https://www.google.com/imgres?q=movie%20icon%20image&imgurl=https%3A%2F%2Fwww.iconpacks.net%2Ficons%2F1%2Ffree-movie-icon-850-thumb.png&imgrefurl=https%3A%2F%2Fwww.iconpacks.net%2Ffree-icon%2Fmovie-850.html&docid=cPhsrnKf6O2HJM&tbnid=wUJmkqWSSwdIRM&vet=12ahUKEwibmf623NWXAxVjjOEIHbMoANIQnPAOegQIYBAA..i&w=512&h=512&hcb=2&ved=2ahUKEwibmf623NWXAxVjjOEIHbMoANIQnPAOegQIYBAA")
 
 
@@ -72,7 +77,18 @@ movies =pd.DataFrame(movies_dict)
 
 
 import streamlit as st
-st.title("Movie Recommender System")
+@st.cache_resource
+def load_similarity():
+    file_path = hf_hub_download(
+        repo_id="SiddhShant/movie-recommendation-data",
+        filename="similarity.pkl",
+        repo_type="model"
+    )
+
+    with open(file_path, "rb") as file:
+        return pickle.load(file)
+
+similarity = load_similarity()
 selected_movie_name = st.selectbox(
     "Select movie to recommend",
     movies["title"].values,
